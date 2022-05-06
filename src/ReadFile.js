@@ -1,9 +1,10 @@
-const { parseAndEvaluate } = require("./parse-and-evaluate");
+const pl = require("./parse-and-evaluate");
 const fs = require("fs");
 const readline = require("readline");
 const { exit } = require("process");
 const { error } = require("./Message");
 const { default: chalk } = require("chalk");
+const colors = require("colors/safe");
 const prompt = require("prompt-sync")();
 
 function createreadStream(src, functionCall, onClose) {
@@ -25,7 +26,7 @@ function createreadStream(src, functionCall, onClose) {
 
 function prompter() {
   var file = prompt(chalk.blue("=> Enter file URL "));
-  var filename = prompt(chalk.blue("=> File name  "))
+  var filename = prompt(chalk.blue("=> File name  "));
   if (!file || !filename) {
     error(`File URL OR File name not provided`);
     prompter();
@@ -34,7 +35,7 @@ function prompter() {
   } else {
     return {
       file,
-      filename
+      filename,
     };
   }
 }
@@ -43,25 +44,50 @@ const editor = () => {
   try {
     console.log("Entering File Reader");
     var returned = prompter();
-    var file = returned.file
+    var file = returned.file;
     createreadStream(
       file.trim(),
       (line) => {
         line.replaceAll("\n", " ");
+        
         if (line.indexOf(";") > 0) {
           content += line + "\n";
         } else {
-          content += line;}
-        },
+          content += line;
+        }
+      },
       () => {
-      var filename = returned.filename
-      try {
-        fs.writeFile("/Users/hammad/Documents/htdocs/Hammad-Subhtdocs/NewScript/compiled/" + filename + "-compiled", content, () => {},() => {});
-      } catch (error) {
-        fs.appendFile("/Users/hammad/Documents/htdocs/Hammad-Subhtdocs/NewScript/compiled/" + filename + "-compiled", content)
-      }
-        var newURL = "/Users/hammad/Documents/htdocs/Hammad-Subhtdocs/NewScript/compiled/" + filename +"-compiled";
-        createreadStream(newURL,(line) => {parseAndEvaluate(line);},() => {});
+        var filename = returned.filename;
+        try {
+          fs.writeFile(
+            "/Users/hammad/Documents/htdocs/Hammad-Subhtdocs/NewScript/compiled/" +
+              filename +
+              "-compiled",
+            content,
+            () => {},
+            () => {}
+          );
+        } catch (error) {
+          fs.appendFile(
+            "/Users/hammad/Documents/htdocs/Hammad-Subhtdocs/NewScript/compiled/" +
+              filename +
+              "-compiled",
+            content
+          );
+        }
+        var newURL =
+          "/Users/hammad/Documents/htdocs/Hammad-Subhtdocs/NewScript/compiled/" +
+          filename +
+          "-compiled";
+        console.clear();
+        console.log(colors.zebra(`====START====`));
+        createreadStream(
+          newURL,
+          (line) => {
+            pl.eval(line);
+          },
+          () => {}
+        );
       }
     );
   } catch (err) {

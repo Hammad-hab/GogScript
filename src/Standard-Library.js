@@ -1,31 +1,11 @@
 const { error } = require("./Message");
 const { StringHelpers } = require("./Helpers");
 const prompt = require("prompt-sync")();
-const{ MATH }= require('./Math.js')
-const { isWhitespace } = require("./Helpers")
-
-const  { parseAndEvaluate } = require("./parse-and-evaluate")
+const { MATH } = require("./Math.js");
+const pl  = require("./parse-and-evaluate");
 // Variable Func
-const func = (name, args) => {
-  var params = args
-  Enviorment[name] = function () {
-    if (params[0] === "(") {
-      var i = 1
-      var name = ""
-      var param = ""
-      while (!isWhitespace(params[i])) {
-         name += params[i]
-         i++
-      }
-      while(!isWhitespace(params[i])) {
-        param += params[i]
-        i++
-      }
 
-   console.log(param + " " + name)
-    }
-   }
-  }
+
 
 function define(nm, as, dt, value) {
   if (as != Enviorment["as"]) {
@@ -51,7 +31,13 @@ function define(nm, as, dt, value) {
   }
   return Enviorment[nm];
 }
-
+const IF = (condition, then, thenDo, elset, orelse) => {
+  if (condition) {
+    pl.eval(then)
+  } else {
+    console.log("no");
+  }
+};
 function assign(value, to, nm) {
   if (typeof value === Enviorment.VariableDataTypes[nm].dataType) {
     Enviorment[nm] = value;
@@ -65,7 +51,6 @@ function assign(value, to, nm) {
   return Enviorment[nm];
 }
 
-
 // Basic Func
 function Input(txt) {
   return prompt(txt + ": ");
@@ -75,17 +60,14 @@ const log = function (...txt) {
   console.log(string);
 };
 
-
-
 var Enviorment = {
   // functions
-  func,
   log,
   define,
   assign,
   Input,
-  parseAndEvaluate,
-  
+  IF,
+
   ...StringHelpers,
 
   // inner Data
@@ -104,8 +86,10 @@ var Enviorment = {
   as: "as",
   to: "to",
   and: "and",
+  then: "then",
+  else: "else",
 
-  ...MATH
+  ...MATH,
 };
 
 module.exports = {

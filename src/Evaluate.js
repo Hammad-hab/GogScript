@@ -22,7 +22,7 @@ const getFunc = (node) => {
 }
 
 
-const Evaluate = node => {
+const Evaluate = (node) => {
     if (node.type === "Call_Expression") return getFunc(node);
     if (node.type === "Identifier") return getIdentifier(node);
     if (node.value) return node.value

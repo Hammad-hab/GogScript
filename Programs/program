@@ -1,5 +1,0 @@
-(define `name` as str);
-
-(assign (Input "What is your name") to `name`);
-
-(log (rnbw "Hello ") (rnbw name))
