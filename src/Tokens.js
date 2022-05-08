@@ -5,6 +5,7 @@ const {
   isParenthesis,
   isQuote,
   isOperator,
+  isTempQuote
 } = require("./Helpers");
 const chalk = require("chalk");
 function tokenize(input) {
@@ -38,8 +39,20 @@ function tokenize(input) {
       });
       cursor++;
       continue;
+    } 
+     
+    if (isTempQuote(Char)) {
+      var Expression = ""
+      while (!isTempQuote(input[++cursor])) {
+        Expression += input[cursor];
+      }
+      tokens.push({
+        type: "Code",
+        value: Expression,
+      });
+      cursor++;
+      continue;
     }
-
     if (isParenthesis(Char)) {
       tokens.push({
         type: "Parathenisis",
@@ -48,7 +61,7 @@ function tokenize(input) {
       cursor++;
       continue;
     }
-
+ 
     if (isLetter(Char)) {
       var Name = Char;
       while (isLetter(input[++cursor])) {

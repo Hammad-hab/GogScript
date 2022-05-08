@@ -1,0 +1,18 @@
+// Conditionals example using a number guessing game 
+(log "Welcome to a number guessing game...." nl (bld "PLAY"));
+(Input "");
+(define "randNum" as int (random 10));
+(log "A random number between 0 and 10 has been chosen.");
+(define "answer" as int (toInt (Input "Your answer: ")));
+(if (isEqual answer randNum) then {
+(log (rnbw "YOU WIN")).
+(define "name" as str (Input "What is your name? ")).
+(log "Congratulations " name)
+} else  {
+    (if (isGreaterThan answer randNum) then {
+        (log "Your answer is greater than the answer%f")
+    } else {
+        (log "Your answer is incorrect")
+    })
+})
+

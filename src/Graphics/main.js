@@ -25,6 +25,6 @@ border-right: ${TriangleStyle.width2} solid transparent;
 `;
 }
 
-
+function setPosition () {}
 setTriangleStyle("rgb(90, 0 , 8)", "500px", "0px", "270px");
 triangle()

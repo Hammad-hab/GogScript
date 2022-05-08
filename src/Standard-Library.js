@@ -1,8 +1,9 @@
 const { error } = require("./Message");
-const { StringHelpers } = require("./Helpers");
+const { StringHelpers, ConditionalHelpers} = require("./Helpers");
 const prompt = require("prompt-sync")();
 const { MATH } = require("./Math.js");
 const pl  = require("./parse-and-evaluate");
+const { thisBooleanValue } = require("es-abstract/es2017");
 // Variable Func
 
 
@@ -31,13 +32,31 @@ function define(nm, as, dt, value) {
   }
   return Enviorment[nm];
 }
-const IF = (condition, then, thenDo, elset, orelse) => {
+const IF = (condition, thenkeyword, thendo, elsekeyword, orelse) => {
   if (condition) {
-    pl.eval(then)
-  } else {
-    console.log("no");
-  }
+    var then = thendo.trim().split(".")
+     for (let i = 0; i <  then.length; i++) {
+       var element = then[i];
+       pl.eval(element)
+     }
+    } else if (orelse) {
+       var then = orelse.trim().split(".")
+       for (let i = 0; i <  then.length; i++) {
+       var element = then[i];
+       pl.eval(element)
+     }
+    } 
 };
+
+const func = (nm, on_execute) => {
+  Enviorment[nm] = () => {
+    var then = on_execute.trim().split(".")
+    for (let i = 0; i <  then.length; i++) {
+      var element = then[i];
+      pl.eval(element)
+    }
+  }
+}
 function assign(value, to, nm) {
   if (typeof value === Enviorment.VariableDataTypes[nm].dataType) {
     Enviorment[nm] = value;
@@ -53,21 +72,30 @@ function assign(value, to, nm) {
 
 // Basic Func
 function Input(txt) {
-  return prompt(txt + ": ");
+  return prompt(txt);
 }
 const log = function (...txt) {
-  var string = txt.join("");
+  var string = txt.join('');
+  string = string.replaceAll("%f", ".")
+  string = string.replaceAll("%s", ";")
   console.log(string);
 };
 
+const array = function (name, ...elements) {
+  Enviorment[name] = [...elements]
+}
 var Enviorment = {
   // functions
+  array,
   log,
   define,
   assign,
   Input,
-  IF,
-
+  if: IF,
+  function: func,
+  toInt: num => Number(num),
+  toStr: str => String(str),
+  toBool: bool => Boolean(bool),
   ...StringHelpers,
 
   // inner Data
@@ -77,10 +105,11 @@ var Enviorment = {
   int: "number",
   str: "string",
   bool: "boolean",
-  False: "false",
-  True: "true",
+  false: "false",
+  true: "true",
   NULL: null,
   autoDect: "autoDetection",
+  Array: "object",
   // prefixes
 
   as: "as",
@@ -88,10 +117,12 @@ var Enviorment = {
   and: "and",
   then: "then",
   else: "else",
-
+  with: "with",
   ...MATH,
+  ...ConditionalHelpers,
 };
 
 module.exports = {
   Enviorment,
 };
+

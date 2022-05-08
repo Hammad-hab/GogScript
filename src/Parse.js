@@ -44,6 +44,13 @@ const parse = (tokens) => {
       value: token.value,
     };
   }
+  
+  if (token.type === "Code") {
+    return {
+      type: "Code",
+      value: token.value
+    }
+  }
 
   if (token.type === "Name") {
     return {

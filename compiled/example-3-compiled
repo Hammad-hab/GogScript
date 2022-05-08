@@ -1,0 +1,3 @@
+(define `input` as str); 
+(assign (Input "What is your name? ") to `input`); 
+(log "Hello " input); 

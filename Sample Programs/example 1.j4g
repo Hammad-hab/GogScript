@@ -1,0 +1,8 @@
+// This program displays basic log styles that are avalable in J4G;
+(log (rd "This text is red")); // gives red text;
+(log (bl "This text is blue")); // gives blue text;
+(log (gr "This text is green")); // gives green text;
+(log (gry "This text is gray")); // gives gray text;
+(log (rnbw "This text is like a rainbow")); // gives text that is rainbow colored;
+(log (bld "This text is bold")); // gives bold text;
+(log (itc "This text is italiziced")); // gives text which is italicized;

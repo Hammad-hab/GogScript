@@ -1,0 +1,4 @@
+(define `Cool` as str "Hello World");
+(log Cool);
+(assign "Hello again" to `Cool`);
+(log Cool);

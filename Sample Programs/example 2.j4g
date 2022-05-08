@@ -1,0 +1,7 @@
+(define `Cool` as str "Hello World");
+// the ` sign is used to define unexisting identifiers and Code
+// str is a short for "String". It is a datatype
+(log Cool);
+
+(assign "Hello again" to `Cool`);
+(log Cool);

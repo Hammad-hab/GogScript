@@ -1,0 +1,6 @@
+// User Input
+(define `input` as str); 
+// a variable without a value is created
+(assign (Input "What is your name? ") to `input`); 
+// Input function returns the input that is given. The returned value gets assigned to the "input" variable
+(log "Hello " input); // cool

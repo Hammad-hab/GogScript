@@ -6,7 +6,7 @@ const { error } = require("./Message");
 const { default: chalk } = require("chalk");
 const colors = require("colors/safe");
 const prompt = require("prompt-sync")();
-
+var lineNo = 1;
 function createreadStream(src, functionCall, onClose) {
   var ReadStream = readline.createInterface({
     input: fs.createReadStream(src.trim()),
@@ -23,8 +23,8 @@ function createreadStream(src, functionCall, onClose) {
     }
   });
 }
-
 function prompter() {
+
   var file = prompt(chalk.blue("=> Enter file URL "));
   var filename = prompt(chalk.blue("=> File name  "));
   if (!file || !filename) {
@@ -32,7 +32,16 @@ function prompter() {
     prompter();
   } else if (file === "--" || filename === "--") {
     exit();
-  } else {
+  } else if (file === "setDefFile") {
+    file = prompt(chalk.blue("=> Enter default file URL "));
+    fs.writeFile(
+      file,
+      "Default file is set.\n " + filename + "\n" + file,
+      () => {},
+      () => {}
+    );
+  }
+  else {
     return {
       file,
       filename,
@@ -48,13 +57,17 @@ const editor = () => {
     createreadStream(
       file.trim(),
       (line) => {
-        line.replaceAll("\n", " ");
-        
+        if (!line.startsWith('//')) {
+         line.replaceAll("\n", "");
+        if (line.indexOf("//") > 0 && !line.startsWith("//")) {
+          line = line.substring(0, line.indexOf('//'))
+        }
         if (line.indexOf(";") > 0) {
           content += line + "\n";
         } else {
           content += line;
         }
+      }
       },
       () => {
         var filename = returned.filename;
@@ -84,7 +97,10 @@ const editor = () => {
         createreadStream(
           newURL,
           (line) => {
+            if (!line.startsWith('//')) {
             pl.eval(line);
+            } 
+            lineNo++
           },
           () => {}
         );
