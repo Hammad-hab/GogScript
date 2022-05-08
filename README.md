@@ -1,4 +1,4 @@
-# GogScript. 
+# J4G (*JavaScript For Graphics*)
 
 > Basic commands
 
